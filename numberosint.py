@@ -6,6 +6,7 @@ from phonenumbers import geocoder
 from phonenumbers import carrier
 import subprocess
 import socket 
+import hashlib
 number = Tk()
 
 myfont = font.Font (family="Helvetica",size= 12 , weight="bold")
@@ -14,6 +15,38 @@ number.geometry("1300x800")
 number.title("NUMOSINT")
 number['background'] = '#728FCE'
 homepage = Frame(number, width=150 , height=150)
+
+def crack():
+    flag = 0
+    pass_hash = hash_var.get()
+    wordlist = dir_var.get()
+
+    try :
+        pass_file = open(wordlist,"r")
+    except:
+        print("NO FILE FOUND!")
+        ping_scrolled_text.insert("No file FOUND!!","\n")
+        quit()
+    for word in pass_file:
+
+        enc_wrd = word.encode('utf-8')
+        digest = hashlib.md5(enc_wrd.strip()).hexdigest()
+        if digest == pass_hash:
+            print("PASSWORD FOUND!")
+            print("PASSWORD IS "+ word)
+            ping_scrolled_text.insert(END,"SUCCESS PASSWORD FOUND!!" ,"\n")
+            ping_scrolled_text.insert(INSERT ,"\n")
+            ping_scrolled_text.insert(END,"THE CORRECT PASSWORD IS:" ,"\n")
+            ping_scrolled_text.insert(INSERT ,"\n")
+            ping_scrolled_text.insert(END,word ,"\n")
+            ping_scrolled_text.insert(INSERT ,"\n")
+            
+            break
+    if flag == 0:
+        print("")
+        ping_scrolled_text.insert(END,"END","\n")
+
+
 def ping():
     cmd = ["ping", entry.get(), "-c", "10"]
     output = subprocess.check_output(cmd) #output = subprocess.check_output("ping {} -c 2".format(entry.get()), shell=True)
@@ -46,10 +79,12 @@ def reset():
     num.set("")
 def clear():
     ping_scrolled_text.delete(1.0,END)
-    ping_result = Label(ping_scrolled_text, text="PING RESULTS WILL SHOW  HERE ", font=myfont, fg="black", bg="grey")
+    ping_result = Label(ping_scrolled_text, text="CMD  RESULTS WILL SHOW  HERE ", font=myfont, fg="black", bg="grey")
     ping_scrolled_text.window_create("end",window=ping_result)
     entry.set("")
     ip.set("")
+    hash_var.set("")
+    dir_var.set("")
 
 def url():
     url = ip.get() 
@@ -69,6 +104,8 @@ global ip
 num = StringVar()
 entry=StringVar()
 ip=StringVar()
+hash_var=StringVar()
+dir_var= StringVar()
 global number_entry
 number_entry = Entry(number, textvariable=num, font=myfont)
 number_entry.place(x=100, y=150)
@@ -103,11 +140,27 @@ item_scrolled_text.place(x=500, y=100)
 ping_scrolled_text = scrolledtext.ScrolledText(number, width=35, height=30, bg="black", fg="green")
 ping_scrolled_text.place(x=900, y=100)
 
-ping_result = Label(ping_scrolled_text, text="PING RESULTS WILL SHOW  HERE ", font=myfont, fg="black", bg="grey")
+ping_result = Label(ping_scrolled_text, text="CMD  RESULTS WILL SHOW  HERE ", font=myfont, fg="black", bg="grey")
 ping_scrolled_text.window_create("end",window=ping_result)
 
 creation_label = Label(number, text="Created by $z3ux \n www.e-poltechsolutions.com")
 creation_label.place(x=1100, y=650)
+
+hash_label= Label(number, text="BRUTEFORCE AREA", font=myfont )
+hash_label.place(x=500, y=500)
+
+hash_entry = Entry(number, textvariable = hash_var , )
+hash_entry.place(x=500, y=550)
+hash_entrylabel = Label(number, text="Input Hash", font=myfont, bg="#728FCE")
+hash_entrylabel.place(x=400, y=550)
+dir_entrylabel = Label(number, text="Paste Dir", font=myfont, bg="#728FCE")
+dir_entrylabel.place(x=400, y=600)
+
+dir_entry = Entry(number, textvariable= dir_var )
+dir_entry.place(x=500, y=600)
+
+crack_btn = Button(number, text="Crack", bg="skyblue" , command=crack)
+crack_btn.place(x=400, y=650)
 
 number_result = Label(item_scrolled_text, text="NUMBER RESULTS WILL SHOW  HERE >",font=myfont)
 item_scrolled_text.window_create("end",window=number_result)
