@@ -15,7 +15,7 @@ number.geometry("1300x800")
 number.title("NUMOSINT")
 number['background'] = '#728FCE'
 homepage = Frame(number, width=150 , height=150)
-
+// Crack Function
 def crack():
     flag = 0
     pass_hash = hash_var.get()
@@ -27,6 +27,7 @@ def crack():
         print("NO FILE FOUND!")
         ping_scrolled_text.insert("No file FOUND!!","\n")
         quit()
+        // Iterate to on the pass_file file 
     for word in pass_file:
 
         enc_wrd = word.encode('utf-8')
@@ -46,7 +47,7 @@ def crack():
         print("")
         ping_scrolled_text.insert(END,"END","\n")
 
-
+// Ping Function 
 def ping():
     cmd = ["ping", entry.get(), "-c", "10"]
     output = subprocess.check_output(cmd) #output = subprocess.check_output("ping {} -c 2".format(entry.get()), shell=True)
